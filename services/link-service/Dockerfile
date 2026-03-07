@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o link-service main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o link-service ./services/link-service/main.go
 
 
 FROM alpine:latest

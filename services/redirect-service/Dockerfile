@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o redirect-service main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o redirect-service ./services/redirect-service/main.go
 
 
 FROM alpine:latest
