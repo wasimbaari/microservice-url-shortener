@@ -1,4 +1,5 @@
 FROM nginx:alpine
+RUN apk upgrade --no-cache
 
 # Copy frontend files
 COPY frontend/ /usr/share/nginx/html/

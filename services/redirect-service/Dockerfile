@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o redirect-service ./services/redirect-se
 
 FROM alpine:latest
 
-RUN apk --no-cache add ca-certificates
+RUN apk upgrade --no-cache && apk add --no-cache ca-certificates
 
 WORKDIR /root/
 
