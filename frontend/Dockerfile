@@ -1,13 +1,12 @@
-# Frontend Dockerfile for URL Shortener
 FROM nginx:alpine
 
 # Copy frontend files
-COPY . /usr/share/nginx/html/
+COPY frontend/ /usr/share/nginx/html/
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx config
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
