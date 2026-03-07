@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/YOUR_USERNAME/microservice-url-shortener
+    repoURL: https://github.com/wasimbaari/microservice-url-shortener.git
     targetRevision: main
     path: k8s
 
