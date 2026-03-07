@@ -53,22 +53,17 @@ jobs:
         run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
       # Build Docker Images
-
       - name: Build frontend image
-        run: |
-          docker build -t $ECR_REGISTRY/url-shortener/frontend:$IMAGE_TAG ./frontend
+        run: docker build -t $ECR_REGISTRY/url-shortener/frontend:$IMAGE_TAG -f ./frontend/Dockerfile .
 
       - name: Build link service image
-        run: |
-          docker build -t $ECR_REGISTRY/url-shortener/link:$IMAGE_TAG ./services/link
+        run: docker build -t $ECR_REGISTRY/url-shortener/link:$IMAGE_TAG -f ./services/link-service/Dockerfile .
 
       - name: Build redirect service image
-        run: |
-          docker build -t $ECR_REGISTRY/url-shortener/redirect:$IMAGE_TAG ./services/redirect
+        run: docker build -t $ECR_REGISTRY/url-shortener/redirect:$IMAGE_TAG -f ./services/redirect-service/Dockerfile .
 
       - name: Build stats service image
-        run: |
-          docker build -t $ECR_REGISTRY/url-shortener/stats:$IMAGE_TAG ./services/stats
+        run: docker build -t $ECR_REGISTRY/url-shortener/stats:$IMAGE_TAG -f ./services/stats-service/Dockerfile .
 
 
       # Trivy Image Scans
