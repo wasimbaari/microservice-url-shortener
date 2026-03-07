@@ -116,10 +116,10 @@ jobs:
 
       - name: Update image tag in manifests
         run: |
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/frontend/deployment.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/link/deployment.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/redirect/deployment.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/stats/deployment.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/api/deployment.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/api/deployment.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/api/deployment.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s/api/deployment.yaml
 
 
       # Commit updated manifests
