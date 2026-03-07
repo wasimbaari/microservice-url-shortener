@@ -1,0 +1,7 @@
+
+ECR repositories required:
+
+url-shortener/link-service
+url-shortener/redirect-service
+url-shortener/stats-service
+url-shortener/frontend

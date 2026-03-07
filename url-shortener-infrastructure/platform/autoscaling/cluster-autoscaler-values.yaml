@@ -1,0 +1,10 @@
+
+autoDiscovery:
+  clusterName: url-shortener-eks
+
+awsRegion: ap-south-1
+
+rbac:
+  create: true
+
+replicaCount: 1

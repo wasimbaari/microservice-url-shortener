@@ -1,0 +1,55 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_REGION: ap-south-1
+  ECR_REGISTRY: 734367008253.dkr.ecr.ap-south-1.amazonaws.com
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build frontend
+        run: |
+          docker build -t $ECR_REGISTRY/url-shortener/frontend:latest ./frontend
+          docker push $ECR_REGISTRY/url-shortener/frontend:latest
+
+      - name: Build link service
+        run: |
+          docker build -t $ECR_REGISTRY/url-shortener/link:latest ./services/link
+          docker push $ECR_REGISTRY/url-shortener/link:latest
+
+      - name: Build redirect service
+        run: |
+          docker build -t $ECR_REGISTRY/url-shortener/redirect:latest ./services/redirect
+          docker push $ECR_REGISTRY/url-shortener/redirect:latest
+
+      - name: Build stats service
+        run: |
+          docker build -t $ECR_REGISTRY/url-shortener/stats:latest ./services/stats
+          docker push $ECR_REGISTRY/url-shortener/stats:latest
+
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name url-shortener-dev
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/
