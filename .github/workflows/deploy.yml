@@ -1,22 +1,49 @@
-name: Build and Deploy
+name: DevSecOps CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 env:
   AWS_REGION: ap-south-1
   ECR_REGISTRY: 734367008253.dkr.ecr.ap-south-1.amazonaws.com
 
 jobs:
-  build:
+
+  security-scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure AWS
+      # ---------- CHECKOV ----------
+      - name: Run Checkov Scan
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./url-shortener-infrastructure
+          framework: terraform
+
+      # ---------- TRIVY FILE SYSTEM ----------
+      - name: Run Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+
+  build-and-deploy:
+
+    needs: security-scan
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
@@ -26,25 +53,41 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build frontend
+      # ---------- BUILD IMAGES ----------
+
+      - name: Build frontend image
         run: |
           docker build -t $ECR_REGISTRY/url-shortener/frontend:latest ./frontend
-          docker push $ECR_REGISTRY/url-shortener/frontend:latest
 
       - name: Build link service
         run: |
           docker build -t $ECR_REGISTRY/url-shortener/link:latest ./services/link
-          docker push $ECR_REGISTRY/url-shortener/link:latest
 
       - name: Build redirect service
         run: |
           docker build -t $ECR_REGISTRY/url-shortener/redirect:latest ./services/redirect
-          docker push $ECR_REGISTRY/url-shortener/redirect:latest
 
       - name: Build stats service
         run: |
           docker build -t $ECR_REGISTRY/url-shortener/stats:latest ./services/stats
+
+      # ---------- TRIVY IMAGE SCAN ----------
+
+      - name: Scan frontend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.ECR_REGISTRY }}/url-shortener/frontend:latest
+
+      # ---------- PUSH TO ECR ----------
+
+      - name: Push images
+        run: |
+          docker push $ECR_REGISTRY/url-shortener/frontend:latest
+          docker push $ECR_REGISTRY/url-shortener/link:latest
+          docker push $ECR_REGISTRY/url-shortener/redirect:latest
           docker push $ECR_REGISTRY/url-shortener/stats:latest
+
+      # ---------- DEPLOY TO EKS ----------
 
       - name: Configure kubectl
         run: |
