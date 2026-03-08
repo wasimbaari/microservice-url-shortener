@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: 734367008253.dkr.ecr.ap-south-1.amazonaws.com/url-shortener/link:IMAGE_TAG
+        image: 734367008253.dkr.ecr.ap-south-1.amazonaws.com/url-shortener/link:d3a1219600c84eacb4ea39f5e7ab361b1b89d390
         ports:
         - containerPort: 8000
         env:
