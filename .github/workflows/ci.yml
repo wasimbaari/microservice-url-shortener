@@ -112,34 +112,19 @@ jobs:
         run: docker push $ECR_REGISTRY/url-shortener/stats:$IMAGE_TAG
 
 
-      # Update Kubernetes manifests for ArgoCD
-
+    # Update Kubernetes manifests for ArgoCD
       - name: Update image tag in manifests
         run: |
           sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/03-link-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/04-redirect-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/05-stats-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/07-frontend.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/03-link-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/04-redirect-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/05-stats-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/07-frontend.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/03-link-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/04-redirect-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/05-stats-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/07-frontend.yaml
-          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/03-link-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/04-redirect-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/05-stats-service.yaml
-      sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/07-frontend.yaml
-
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/04-redirect-service.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/05-stats-service.yaml
+          sed -i "s|IMAGE_TAG|$IMAGE_TAG|g" k8s-app/gitopsportainer/07-frontend.yaml
 
       # Commit updated manifests
-
       - name: Commit manifest updates
         run: |
           git config --global user.email "ci@github.com"
           git config --global user.name "github-actions"
           git add .
-          git commit -m "Update image tag $IMAGE_TAG [skip ci]" || echo "No changes"
+          git commit -m "Update image tag $IMAGE_TAG [skip ci]" || echo "No changes to commit"
           git push
