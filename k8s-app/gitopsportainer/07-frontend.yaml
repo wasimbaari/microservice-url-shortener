@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 734367008253.dkr.ecr.ap-south-1.amazonaws.com/url-shortener/link:IMAGE_TAG
+          image: 734367008253.dkr.ecr.ap-south-1.amazonaws.com/url-shortener/link:ede30cfd682141ff0df8d15b875e75f706f3151e
           ports:
             - containerPort: 80
               name: http
