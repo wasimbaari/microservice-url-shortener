@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: piyushsachdeva/url-shortener-frontend:latest
+          image: 734367008253.dkr.ecr.ap-south-1.amazonaws.com/url-shortener/link:IMAGE_TAG
           ports:
             - containerPort: 80
               name: http
